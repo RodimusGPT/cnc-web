@@ -1,0 +1,3 @@
+[submodule "vendor/vanilla-conquer"]
+	path = vendor/vanilla-conquer
+	url = https://github.com/RodimusGPT/Vanilla-Conquer.git

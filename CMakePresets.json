@@ -1,0 +1,95 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 25,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "testing",
+      "displayName": "Browser adapter tests",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/testing",
+      "cacheVariables": {
+        "BUILD_TESTS": "ON",
+        "BUILD_WEBTD": "OFF",
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "VANILLA_CONQUER_SOURCE_DIR": "${sourceDir}/vendor/vanilla-conquer"
+      }
+    },
+    {
+      "name": "web-td",
+      "displayName": "Tiberian Dawn WebAssembly",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/web-td",
+      "toolchainFile": "${sourceDir}/cmake/toolchains/Emscripten.cmake",
+      "cacheVariables": {
+        "BUILD_TESTS": "OFF",
+        "BUILD_WEBTD": "ON",
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "VANILLA_CONQUER_SOURCE_DIR": "${sourceDir}/vendor/vanilla-conquer"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "testing",
+      "configurePreset": "testing"
+    },
+    {
+      "name": "web-td",
+      "configurePreset": "web-td",
+      "targets": [
+        "TiberianDawnWeb"
+      ]
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "testing",
+      "configurePreset": "testing",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
+      }
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "testing",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "testing"
+        },
+        {
+          "type": "build",
+          "name": "testing"
+        },
+        {
+          "type": "test",
+          "name": "testing"
+        }
+      ]
+    },
+    {
+      "name": "web-td",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "web-td"
+        },
+        {
+          "type": "build",
+          "name": "web-td"
+        }
+      ]
+    }
+  ]
+}
